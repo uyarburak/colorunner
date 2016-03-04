@@ -17,13 +17,11 @@ public class ColoRunner extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		Assets.load();
 		setScreen(new MainScreen(this));
 	}
 
 	@Override
 	public void render() {
-		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		super.render();
 	}

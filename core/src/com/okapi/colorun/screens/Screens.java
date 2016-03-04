@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Screens implements Screen {
 
-    protected SpriteBatch batch;
     protected Game game;
+    protected SpriteBatch batch;
 
     public Screens(Game game) {
         this.game = game;
@@ -26,6 +26,7 @@ public abstract class Screens implements Screen {
 
     @Override
     public void resize(int width, int height) {
+
     }
 
     @Override

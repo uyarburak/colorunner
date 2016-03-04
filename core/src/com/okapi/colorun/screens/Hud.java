@@ -1,27 +1,23 @@
 package com.okapi.colorun.screens;
 
-        import com.badlogic.gdx.graphics.Color;
-        import com.badlogic.gdx.graphics.OrthographicCamera;
-        import com.badlogic.gdx.graphics.g2d.BitmapFont;
-        import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-        import com.badlogic.gdx.scenes.scene2d.Stage;
-        import com.badlogic.gdx.scenes.scene2d.ui.Label;
-        import com.badlogic.gdx.scenes.scene2d.ui.Table;
-        import com.badlogic.gdx.utils.Disposable;
-        import com.badlogic.gdx.utils.viewport.FitViewport;
-        import com.badlogic.gdx.utils.viewport.Viewport;
-        import com.okapi.colorun.Assets;
-        import com.okapi.colorun.ColoRunner;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.okapi.colorun.Assets;
+import com.okapi.colorun.ColoRunner;
 
-/**
- * Created by burak on 18.02.2016.
- */
+import static com.okapi.colorun.Assets.*;
+
 public class Hud implements Disposable {
 
     private Viewport viewport;
     public Stage stage;
-
-    private BitmapFont font;
 
     private static Integer score;
     private static Integer hiscore;
@@ -33,9 +29,8 @@ public class Hud implements Disposable {
 
         viewport = new FitViewport(ColoRunner.WIDTH, ColoRunner.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
-
-        font = Assets.font;
-        font.getData().setScale(.25f, .25f);
+        ;
+        FONT.getData().setScale(.25f, .25f);
 
         score = 0;
         hiscore = Assets.getHighScore();
@@ -47,15 +42,15 @@ public class Hud implements Disposable {
         //make the table fill the entire stage
         table.setFillParent(true);
 
-        //define our labels using the String, and a Label style consisting of a font and color
-        scoreLabel = new Label(String.format("%3d", score), new Label.LabelStyle(font, Color.WHITE));
-        colorLabel = new Label(String.format("%6s", "COLOR"), new Label.LabelStyle(font, Color.WHITE));
-        hiscoreLabel = new Label(String.format("%3d", hiscore), new Label.LabelStyle(font, Color.WHITE));
+        //define our labels using the String, and a Label style consisting of a FONT and color
+        scoreLabel = new Label(String.format("%3d", score), new Label.LabelStyle(FONT, Color.WHITE));
+        colorLabel = new Label(String.format("%6s", "COLOR"), new Label.LabelStyle(FONT, Color.WHITE));
+        hiscoreLabel = new Label(String.format("%3d", hiscore), new Label.LabelStyle(FONT, Color.WHITE));
 
         //add our labels to our table, padding the top, and giving them all equal width with expandX
-        table.add(new Label("RECORD", new Label.LabelStyle(font, Color.WHITE))).expandX().padTop(10);
+        table.add(new Label("RECORD", new Label.LabelStyle(FONT, Color.WHITE))).expandX().padTop(10);
         table.add(colorLabel).expandX().padTop(10);
-        table.add(new Label("SCORE", new Label.LabelStyle(font, Color.WHITE))).expandX().padTop(10);
+        table.add(new Label("SCORE", new Label.LabelStyle(FONT, Color.WHITE))).expandX().padTop(10);
 
         //add a second row to our table
         table.row().row();
@@ -65,7 +60,6 @@ public class Hud implements Disposable {
 
         //add our table to the stage
         stage.addActor(table);
-
     }
 
     public static int getScore(){

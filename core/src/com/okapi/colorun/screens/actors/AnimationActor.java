@@ -1,4 +1,4 @@
-package com.okapi.colorun.screens.screens.actors;
+package com.okapi.colorun.screens.actors;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.Animation;

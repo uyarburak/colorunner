@@ -1,4 +1,4 @@
-package com.okapi.colorun.screens.screens.actors;
+package com.okapi.colorun.screens.actors;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,10 +26,10 @@ public class ButtonActor extends AbstractActor {
 
         switch(button) {
             case PLAY:
-                texture = Assets.playBtn;
+                texture = Assets.PLAY_BUTTON;
                 break;
             case HIGHSCORE:
-                texture = Assets.rankBtn;
+                texture = Assets.SCORES_BUTTON;
                 break;
             // ...
         }

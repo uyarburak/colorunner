@@ -1,4 +1,4 @@
-package com.okapi.colorun.sprites;
+package com.okapi.colorun.objects;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,9 +18,9 @@ public class Runner extends GameObject {
 
     private static final float MOVEMENT = 1.3f;
 
-    private final Animation RUNNING_ANIMATION = Assets.runningAnimation;
-    private final Animation JUMPING_ANIMATION = Assets.jumpingAnimation;
-    private final Animation FALLING_ANIMATION = Assets.fallingAnimation;
+    private final Animation RUNNING_ANIMATION = Assets.RUN;
+    private final Animation JUMPING_ANIMATION = Assets.JUMP;
+    private final Animation FALLING_ANIMATION = Assets.FALL;
     private Animation animation;
 
     private boolean isOnTheGround;
@@ -40,7 +40,7 @@ public class Runner extends GameObject {
         stateTime = 0;
         currentState = State.RUNNING;
         currentColor = Color.NONE;
-        soundJump = Assets.soundJump;
+        soundJump = Assets.JUMP_SOUND;
 
         define(x, y);
         setBounds(getX(), getY(), getWidth() / ColoRunner.PPM, getHeight() / ColoRunner.PPM);

@@ -3,7 +3,7 @@ package com.okapi.colorun.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.okapi.colorun.ColoRunnerDemo;
+import com.okapi.colorun.ColoRunner;
 
 public class HtmlLauncher extends GwtApplication {
 
@@ -14,6 +14,6 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener getApplicationListener () {
-                return new ColoRunnerDemo();
+                return new ColoRunner();
         }
 }

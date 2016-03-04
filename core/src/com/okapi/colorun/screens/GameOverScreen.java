@@ -2,66 +2,58 @@ package com.okapi.colorun.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.okapi.colorun.Assets;
 import com.okapi.colorun.ColoRunner;
-import com.okapi.colorun.screens.screens.actors.*;
-import static com.okapi.colorun.screens.screens.actors.ButtonActor.Button.*;
+import com.okapi.colorun.screens.actors.ButtonActor;
+import com.okapi.colorun.screens.actors.TextureActor;
+
+import static com.badlogic.gdx.graphics.Color.RED;
+import static com.badlogic.gdx.graphics.Color.WHITE;
+import static com.okapi.colorun.Assets.FONT;
+import static com.okapi.colorun.Assets.GAME_OVER;
+import static com.okapi.colorun.Assets.NEW;
+import static com.okapi.colorun.Assets.SCORE_TABLE;
+import static com.okapi.colorun.Assets.getHighScore;
+import static com.okapi.colorun.screens.Positions.GAME_OVER_POS;
+import static com.okapi.colorun.screens.Positions.HIGH_SCORE_LABEL_POS;
+import static com.okapi.colorun.screens.Positions.NEW_POS;
+import static com.okapi.colorun.screens.Positions.PLAY_POS;
+import static com.okapi.colorun.screens.Positions.SCORES_POS;
+import static com.okapi.colorun.screens.Positions.SCORE_LABEL_POS;
+import static com.okapi.colorun.screens.Positions.SCORE_TABLE_POS;
+import static com.okapi.colorun.screens.actors.ButtonActor.Button.HIGHSCORE;
+import static com.okapi.colorun.screens.actors.ButtonActor.Button.PLAY;
 
 public class GameOverScreen extends Screens {
 
     private Stage stage;
 
-    private Texture playBtn, gameOver, scoreTable, rankBtn, newIcon;
-
-    public GameOverScreen(Game game, int score, boolean record) {
+    public GameOverScreen(Game game, int score, boolean recordBroken) {
         super(game);
-        stage = new Stage(new FitViewport(ColoRunner.WIDTH, ColoRunner.HEIGHT));
-        Gdx.input.setInputProcessor(stage);
 
-        playBtn = Assets.playBtn;
-        rankBtn = Assets.rankBtn;
-        gameOver = Assets.gameOver;
-        scoreTable = Assets.scoreTable;
-        newIcon = Assets.newIcon;
+        Gdx.input.setInputProcessor(stage =
+                new Stage(new FitViewport(ColoRunner.WIDTH, ColoRunner.HEIGHT)));
 
-        stage.addActor(new ButtonActor(game, ButtonActor.Button.PLAY,
-                ColoRunner.WIDTH / 2 - playBtn.getWidth() - 5,
-                ColoRunner.HEIGHT / 2 - scoreTable.getHeight()));
+        stage.addActor(new ButtonActor(game, PLAY, PLAY_POS.X, PLAY_POS.Y));
+        stage.addActor(new ButtonActor(game, HIGHSCORE, SCORES_POS.X, SCORES_POS.Y));
+        stage.addActor(new TextureActor(game, GAME_OVER, GAME_OVER_POS.X, GAME_OVER_POS.Y));
+        stage.addActor(new TextureActor(game, SCORE_TABLE, SCORE_TABLE_POS.X, SCORE_TABLE_POS.Y));
 
-        stage.addActor(new ButtonActor(game, ButtonActor.Button.HIGHSCORE,
-                ColoRunner.WIDTH / 2 + 5,
-                ColoRunner.HEIGHT / 2 - scoreTable.getHeight()));
+        if (recordBroken)
+            stage.addActor(new TextureActor(game, NEW, NEW_POS.X, NEW_POS.Y));
 
-        stage.addActor(new TextureActor(game, Assets.gameOver,
-                (ColoRunner.WIDTH - gameOver.getWidth()) / 2,
-                (ColoRunner.HEIGHT + scoreTable.getHeight() + gameOver.getHeight() + 10) / 2));
-
-        stage.addActor(new TextureActor(game, Assets.scoreTable,
-                (ColoRunner.WIDTH - scoreTable.getWidth()) / 2,
-                (ColoRunner.HEIGHT - scoreTable.getHeight() + 30) / 2));
-
-
-        BitmapFont font = Assets.font;
-        font.getData().setScale(.3f, .3f);
-
-        Label scoreLabel = new Label(String.format("%3d", score), new Label.LabelStyle(font, Color.WHITE));
-        scoreLabel.setPosition((ColoRunner.WIDTH + playBtn.getWidth() + 10) / 2, (ColoRunner.HEIGHT + 30) / 2);
+        CharSequence scoreText = String.format("%3d", score);
+        Label scoreLabel = new Label(scoreText, new LabelStyle(FONT, WHITE));
+        scoreLabel.setPosition(SCORE_LABEL_POS.X, SCORE_LABEL_POS.Y);
         stage.addActor(scoreLabel);
 
-        Label hiscoreLabel = new Label(String.format("%3d", Assets.getHighScore()), new Label.LabelStyle(font, Color.RED));
-        hiscoreLabel.setPosition((ColoRunner.WIDTH + playBtn.getWidth() + 10) / 2, (ColoRunner.HEIGHT - playBtn.getHeight()) / 2);
-        stage.addActor(hiscoreLabel);
-
-        if (record)
-            stage.addActor(new TextureActor(game, Assets.newIcon,
-                    (ColoRunner.WIDTH + 48) / 2,
-                    ColoRunner.HEIGHT / 2));
+        CharSequence highScoreText = String.format("%3d", getHighScore());
+        Label highScoreLabel = new Label(highScoreText, new LabelStyle(FONT, RED));
+        highScoreLabel.setPosition(HIGH_SCORE_LABEL_POS.X, HIGH_SCORE_LABEL_POS.Y);
+        stage.addActor(highScoreLabel);
     }
 
     @Override
@@ -74,4 +66,5 @@ public class GameOverScreen extends Screens {
     public void dispose() {
         stage.dispose();
     }
+
 }

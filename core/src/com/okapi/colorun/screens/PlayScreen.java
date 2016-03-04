@@ -13,8 +13,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.okapi.colorun.Assets;
 import com.okapi.colorun.ColoRunner;
 import com.okapi.colorun.ContactHandle;
-import com.okapi.colorun.sprites.Runner;
-import com.okapi.colorun.sprites.Runway;
+import com.okapi.colorun.objects.Runner;
+import com.okapi.colorun.objects.Runway;
 
 
 public class PlayScreen extends Screens {
@@ -23,7 +23,6 @@ public class PlayScreen extends Screens {
     private static final int RUNWAY_COUNT = 5;
 
     //Box2D Collision Bits
-    public static final short NOTHING_BIT = 0;
     public static final short BLACK_BIT = 1;
     public static final short RED_BIT = 2;
     public static final short YELLOW_BIT = 4;
