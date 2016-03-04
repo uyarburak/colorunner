@@ -6,9 +6,6 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.okapi.colorun.sprites.Runner;
 
-/**
- * Created by burakuyar on 15.02.2016.
- */
 public class ContactHandle implements ContactListener {
 
     private Runner runner;

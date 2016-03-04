@@ -1,5 +1,6 @@
 package com.okapi.colorun.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,8 +10,8 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.okapi.colorun.AssetLoader;
-import com.okapi.colorun.ColoRunnerDemo;
+import com.okapi.colorun.Assets;
+import com.okapi.colorun.ColoRunner;
 import com.okapi.colorun.ContactHandle;
 import com.okapi.colorun.sprites.Runner;
 import com.okapi.colorun.sprites.Runway;
@@ -31,7 +32,6 @@ public class PlayScreen extends Screens {
     public static final short RUNNER_BIT = 32;
     public static final short COIN_BIT = 64;
 
-
     private OrthographicCamera cam;
     private FitViewport fitViewport;
 
@@ -44,14 +44,13 @@ public class PlayScreen extends Screens {
     private Runner runner;
     private Array<Runway> runways;
 
-    public PlayScreen() {
-
-        super();
+    public PlayScreen(Game game) {
+        super(game);
 
         cam = new OrthographicCamera();
-        cam.setToOrtho(false, ColoRunnerDemo.WIDTH / ColoRunnerDemo.PPM, ColoRunnerDemo.HEIGHT / ColoRunnerDemo.PPM);
-        cam.position.set(cam.position.x / ColoRunnerDemo.PPM, 0, 0);
-        fitViewport = new FitViewport(ColoRunnerDemo.WIDTH/ColoRunnerDemo.PPM, ColoRunnerDemo.HEIGHT/ColoRunnerDemo.PPM, cam);
+        cam.setToOrtho(false, ColoRunner.WIDTH / ColoRunner.PPM, ColoRunner.HEIGHT / ColoRunner.PPM);
+        cam.position.set(cam.position.x / ColoRunner.PPM, 0, 0);
+        fitViewport = new FitViewport(ColoRunner.WIDTH / ColoRunner.PPM, ColoRunner.HEIGHT / ColoRunner.PPM, cam);
 
         b2dr = new Box2DDebugRenderer();
         debug = false;
@@ -64,47 +63,45 @@ public class PlayScreen extends Screens {
 
         runner = new Runner(50, -56);
         runways = new Array<Runway>();
-        for(int i = 0; i < RUNWAY_COUNT; i++){
-            runways.add(new Runway(i * (RUNWAY_SPACING + Runway.TUBE_WIDTH)+50));
+        for (int i = 0; i < RUNWAY_COUNT; i++) {
+            runways.add(new Runway(i * (RUNWAY_SPACING + Runway.TUBE_WIDTH) + 50));
         }
         runways.add(new Runway(50));
 
     }
 
     protected void handleInput() {
-
-        if(Gdx.input.justTouched() || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.justTouched() || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             runner.jump();
-        }
-        else if(Gdx.input.isKeyJustPressed(Input.Keys.X)){
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
             debug = !debug;
         }
     }
 
     public void update(float dt) {
-
         handleInput();
         world.step(1 / 60f, 6, 2);
 
         runner.update(dt);
-        cam.position.x = runner.getX() + 80 / ColoRunnerDemo.PPM;
+        cam.position.x = runner.getX() + 80 / ColoRunner.PPM;
 
-        for(int i = 0; i < RUNWAY_COUNT; i++){
+        for (int i = 0; i < RUNWAY_COUNT; i++) {
             Runway runway = runways.get(i);
-            if(cam.position.x - (cam.viewportWidth / 2) > runway.getX() + runway.getWidth()/ColoRunnerDemo.PPM){
-                runway.reposition(runway.getX()*ColoRunnerDemo.PPM  + ((Runway.TUBE_WIDTH + RUNWAY_SPACING) * RUNWAY_COUNT));
+            if (cam.position.x - (cam.viewportWidth / 2) > runway.getX() + runway.getWidth() / ColoRunner.PPM) {
+                runway.reposition(runway.getX() * ColoRunner.PPM + ((Runway.TUBE_WIDTH + RUNWAY_SPACING) * RUNWAY_COUNT));
             }
         }
 
         //DIE MOTHERFUCKER
-        if(runner.getY() <= cam.position.y - cam.viewportHeight/2) {
-            int high = AssetLoader.getHighScore();
+        if (runner.getY() <= cam.position.y - cam.viewportHeight / 2) {
+            int high = Assets.getHighScore();
             int score = Hud.getScore();
             boolean record = score > high;
-            if(record) {
-                AssetLoader.setHighScore(score);
+            if (record) {
+                Assets.setHighScore(score);
             }
-            coloRunnerDemo.setScreen(new GameOverScreen(Hud.getScore(), record));
+            System.out.println("Y?");
+            game.setScreen(new GameOverScreen(game, Hud.getScore(), record));
         }
         cam.update();
 
@@ -112,22 +109,20 @@ public class PlayScreen extends Screens {
 
     @Override
     public void render(float delta) {
-
         update(delta);
 
         batch.setProjectionMatrix(cam.combined);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if(debug){
+        if (debug) {
             // Debug renderer
             b2dr.render(world, cam.combined);
             return;
         }
 
         batch.begin();
-        batch.draw(background, cam.position.x - cam.viewportWidth / 2, cam.position.y - cam.viewportHeight / 2, cam.viewportWidth, cam.viewportHeight);
         runner.draw(batch);
-        for(Runway runway : runways) {
+        for (Runway runway : runways) {
             runway.draw(batch);
         }
         batch.end();
@@ -139,42 +134,21 @@ public class PlayScreen extends Screens {
 
     @Override
     public void dispose() {
-
         runner.dispose();
-        for(Runway runway : runways)
+        for (Runway runway : runways)
             runway.dispose();
         hud.dispose();
         System.out.println("Play Screens Disposed");
     }
 
-    public static World getWorld(){
-
+    public static World getWorld() {
         return world;
     }
 
     @Override
-    public void show() {
-
-    }
-
-    @Override
     public void resize(int width, int height) {
-
         fitViewport.update(width, height);
     }
 
-    @Override
-    public void pause() {
 
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
 }

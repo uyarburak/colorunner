@@ -1,6 +1,5 @@
 package com.okapi.colorun.screens;
 
-        import com.badlogic.gdx.Gdx;
         import com.badlogic.gdx.graphics.Color;
         import com.badlogic.gdx.graphics.OrthographicCamera;
         import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -11,8 +10,8 @@ package com.okapi.colorun.screens;
         import com.badlogic.gdx.utils.Disposable;
         import com.badlogic.gdx.utils.viewport.FitViewport;
         import com.badlogic.gdx.utils.viewport.Viewport;
-        import com.okapi.colorun.AssetLoader;
-        import com.okapi.colorun.ColoRunnerDemo;
+        import com.okapi.colorun.Assets;
+        import com.okapi.colorun.ColoRunner;
 
 /**
  * Created by burak on 18.02.2016.
@@ -32,14 +31,14 @@ public class Hud implements Disposable {
     private static Label colorLabel;
     public Hud(SpriteBatch sb){
 
-        viewport = new FitViewport(ColoRunnerDemo.WIDTH, ColoRunnerDemo.HEIGHT, new OrthographicCamera());
+        viewport = new FitViewport(ColoRunner.WIDTH, ColoRunner.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
 
-        font = AssetLoader.font;
+        font = Assets.font;
         font.getData().setScale(.25f, .25f);
 
         score = 0;
-        hiscore = AssetLoader.getHighScore();
+        hiscore = Assets.getHighScore();
 
         //define a table used to organize our hud's labels
         Table table = new Table();

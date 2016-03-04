@@ -1,28 +1,19 @@
 package com.okapi.colorun.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.okapi.colorun.AssetLoader;
-import com.okapi.colorun.ColoRunnerDemo;
 
-/**
- * Created by burakuyar on 16.02.2016.
- */
-public abstract class Screens implements Screen{
+public abstract class Screens implements Screen {
 
-    protected ColoRunnerDemo coloRunnerDemo;
     protected SpriteBatch batch;
+    protected Game game;
 
-    protected Texture background;
-
-    public Screens(){
-
-        this.coloRunnerDemo = ColoRunnerDemo.getGame();
-        batch = coloRunnerDemo.getBatch();
-
-        background = AssetLoader.background;
+    public Screens(Game game) {
+        this.game = game;
+        batch = new SpriteBatch();
     }
+
     @Override
     public void show() {
 
@@ -51,8 +42,4 @@ public abstract class Screens implements Screen{
     public void hide() {
 
     }
-
-    protected abstract void handleInput();
-    public abstract void update(float dt);
-    public abstract void dispose();
 }

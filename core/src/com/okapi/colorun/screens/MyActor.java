@@ -1,5 +1,6 @@
 package com.okapi.colorun.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -7,29 +8,36 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.okapi.colorun.AssetLoader;
-import com.okapi.colorun.ColoRunnerDemo;
 
-/**
- * Created by burakuyar on 19.02.2016.
- */
 public class MyActor extends Actor {
 
-    private enum Type{TEXTURE, ANIMATION};
     private Type type;
+    private enum Type {TEXTURE, ANIMATION}
 
-    public enum ButtonType{PLAY, MAIN};
     private ButtonType buttonType;
+    public enum ButtonType {PLAY, MAIN}
 
     private Texture texture;
     private Animation animation;
 
     private float actorX, actorY, stateTime;
-    private boolean started = false;
+    private boolean started;
 
-    public MyActor(Texture texture, float x, float y, ButtonType buttonType){
+    private Game game;
 
-        this(texture, x, y);
+    public MyActor(Game game, Texture texture, float x, float y) {
+        this.game = game;
+        this.texture = texture;
+        this.actorX = x;
+        this.actorY = y;
+        type = Type.TEXTURE;
+
+        setBounds(x, y, texture.getWidth(), texture.getHeight());
+        setTouchable(Touchable.disabled);
+    }
+
+    public MyActor(Game game, Texture texture, float x, float y, ButtonType buttonType) {
+        this(game, texture, x, y);
 
         this.buttonType = buttonType;
         addListener(new InputListener() {
@@ -41,62 +49,40 @@ public class MyActor extends Actor {
         setTouchable(Touchable.enabled);
     }
 
-    public MyActor(Texture texture, float x, float y){
-
-        this.texture = texture;
-        this.actorX = x;
-        this.actorY = y;
-        type = Type.TEXTURE;
-
-        setBounds(x, y, texture.getWidth(), texture.getHeight());
-        setTouchable(Touchable.disabled);
-    }
-    public MyActor(Animation animation, float x, float y){
-
+    public MyActor(Game game, Animation animation, float x, float y) {
+        this.game = game;
         this.animation = animation;
         this.actorX = x;
         this.actorY = y;
         type = Type.ANIMATION;
         stateTime = 0f;
 
-        setBounds(x, y, animation.getKeyFrame(stateTime).getTexture().getWidth(), animation.getKeyFrame(stateTime).getTexture().getHeight());
-        setTouchable(Touchable.disabled);
+        //setBounds(x, y, animation.getKeyFrame(stateTime).getTexture().getWidth(),
+        // animation.getKeyFrame(stateTime).getTexture().getHeight());
+        //setTouchable(Touchable.disabled);
     }
 
-
     @Override
-    public void draw(Batch batch, float alpha){
-
-        if(type == Type.TEXTURE){
-            if(texture != AssetLoader.background) {
+    public void draw(Batch batch, float alpha) {
+        if (type == Type.TEXTURE)
                 batch.draw(texture, actorX, actorY);
-            }
-            else {
-                batch.draw(texture, actorX, actorY, ColoRunnerDemo.WIDTH, ColoRunnerDemo.HEIGHT);
-            }
-        }else {
+        else
             batch.draw(animation.getKeyFrame(stateTime), actorX, actorY);
-        }
     }
 
     @Override
-    public void act(float delta){
-
-        if(type == Type.ANIMATION){
+    public void act(float delta) {
+        if (type == Type.ANIMATION) {
             stateTime += delta;
-            if(animation.getAnimationDuration() < stateTime) {
+            if (animation.getAnimationDuration() < stateTime)
                 stateTime = 0;
-            }
-
         }
-        if(started){
-            ColoRunnerDemo cd = ColoRunnerDemo.getGame();
-            if(buttonType == ButtonType.MAIN){
-                cd.setScreen(new MainScreen());
-            }
-            else{
-                cd.setScreen(new PlayScreen());
-            }
+
+        if (started) {
+            if (buttonType == ButtonType.MAIN)
+                game.setScreen(new MainScreen(game));
+            else
+                game.setScreen(new PlayScreen(game));
         }
     }
 }
